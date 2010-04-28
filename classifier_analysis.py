@@ -15,7 +15,7 @@ def pca(data, cutoff=0.95):
     print "%d principal components were kept." % pcanode.output_dim
     
     pca_data = pcanode(data)
-    return vsplit(pca_data, 2)
+    return array(vsplit(pca_data, 2))
 
 def classify(data):
     """Expects data of shape (2, channels, trials)."""
