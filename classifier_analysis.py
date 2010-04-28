@@ -6,7 +6,7 @@ def pca(data, cutoff=0.95):
     """Expects data to be of shape (2, channels, trials).
     Returns a list of conditions length of arrays of shape channels x trials."""
     
-    data = hstack((data[0], data[1]))
+    data = hstack((data[0], data[1])).T
     
     pcanode = mdp.nodes.PCANode(output_dim=cutoff, svd=True)
     pcanode.train(data)
@@ -15,7 +15,7 @@ def pca(data, cutoff=0.95):
     print "%d principal components were kept." % pcanode.output_dim
     
     pca_data = pcanode(data)
-    return hsplit(pca_data, 2)
+    return vsplit(pca_data, 2)
 
 def classify(data):
     """Expects data of shape (2, channels, trials)."""
