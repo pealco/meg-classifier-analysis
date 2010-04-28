@@ -20,7 +20,21 @@ def pca(data, cutoff=0.95):
 def classify(data):
     """Expects data of shape (2, channels, trials)."""
 
-    pass
+    data = pca(data)
+    cond1 = Dataset(samples=data[0], labels=0)
+    cond2 = Dataset(samples=data[1], labels=1)
+    dataset = cond1 + cond2
+    
+    cv = CrossValidatedTransferError(
+                TransferError(SMLR()),
+                OddEvenSplitter())
+    
+    error = cv(dataset)
+    
+    print "Error for %i-fold cross-validation on %i-class problem: %f" \
+          % (len(dataset.uniquechunks), len(dataset.uniquelabels), error)
+    
+
 
 def classifier_analysis(data_file):
     file = tables.openFile(the_file)
