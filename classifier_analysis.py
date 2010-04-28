@@ -31,10 +31,7 @@ def classify(data):
     
     error = cv(dataset)
     
-    print "Error for %i-fold cross-validation on %i-class problem: %f" \
-          % (len(dataset.uniquechunks), len(dataset.uniquelabels), error)
-    
-
+    return error
 
 def classifier_analysis(data_file):
     file = tables.openFile(the_file)
@@ -47,4 +44,4 @@ def classifier_analysis(data_file):
     
 if __name__ == "__main__":
     
-    classifier_analysis()
+    classifier_analysis("R0874.h5")
