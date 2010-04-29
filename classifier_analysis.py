@@ -1,8 +1,9 @@
+from pylab import *
 import tables
 import mdp
 from mvpa.suite import *
 
-def pca(data, cutoff=0.95):
+def pca(data, cutoff=0.98):
     """Expects data to be of shape (2, channels, trials).
     Returns a list of conditions length of arrays of shape channels x trials."""
     
@@ -26,16 +27,16 @@ def classify(data):
     dataset = cond1 + cond2
     
     cv = CrossValidatedTransferError(
-                TransferError(SMLR()),
+                TransferError(SVM()),
                 OddEvenSplitter())
     
     error = cv(dataset)
     
     return error
 
-def classifier_analysis(data_file):
+def classifier_analysis(the_file):
     file = tables.openFile(the_file)
-    raw_epochs = file.root.raw_data_epochs
+    raw_epochs = file.root.lowpass_data_epochs
     conditions, samples, channels, trials = raw_epochs.shape
     
     accuracy = [classify(raw_epochs[:, sample, ...]) for sample in range(samples)]
@@ -44,4 +45,7 @@ def classifier_analysis(data_file):
     
 if __name__ == "__main__":
     
-    classifier_analysis("R0874.h5")
+    acc = classifier_analysis("R1442.h5")
+    
+    plot(acc)
+    show()
